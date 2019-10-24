@@ -14,7 +14,7 @@ function createDeck(): Card[] {
       };
 
       const value: CardValue = valueMap[i.toString()] || i.toString();
-      deck.push({ suit, value });
+      deck.push({ suit, value, face: 'UP' });
     }
   }
   return deck;
