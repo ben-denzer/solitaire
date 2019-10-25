@@ -15,7 +15,7 @@ function App(props: Props): JSX.Element {
   }, []);
 
   return (
-    <AppWrapper>
+    <AppWrapper className="AppWrapper">
       <h1>Solitaire</h1>
       {deck.length ? <CardComponent card={deck[0]} /> : null}
     </AppWrapper>

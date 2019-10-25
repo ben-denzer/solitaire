@@ -29,7 +29,7 @@ interface Props {}
 
 function $COMPONENT_NAME(props: Props): JSX.Element {
   return (
-    <${COMPONENT_NAME}Wrapper>$COMPONENT_NAME</${COMPONENT_NAME}Wrapper>
+    <${COMPONENT_NAME}Wrapper className="${COMPONENT_NAME}Wrapper"}>$COMPONENT_NAME</${COMPONENT_NAME}Wrapper>
   );
 }
 
@@ -51,7 +51,7 @@ import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 it('should render without crashing', () => {
-  const { getByText } = render(<${COMPONENT_NAME} />);
-  expect(getByText('${COMPONENT_NAME}')).toBeInTheDocument();
+  const { container } = render(<${COMPONENT_NAME} />);
+  expect(container).toBeInTheDocument();
 });
 EOF

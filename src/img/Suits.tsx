@@ -10,8 +10,8 @@ function ClubImg(): JSX.Element {
       height="1280.000000pt"
       viewBox="0 0 1280.000000 1280.000000"
       preserveAspectRatio="xMidYMid meet"
+      className="ClubImg"
     >
-      <metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata>
       <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)" fill={cardFontBlack} stroke="none">
         <path
           d="M6210 12794 c-19 -2 -78 -9 -130 -15 -470 -53 -954 -260 -1350 -575
@@ -45,8 +45,8 @@ function DiamondImg() {
       height="1280.000000pt"
       viewBox="0 0 960.000000 1280.000000"
       preserveAspectRatio="xMidYMid meet"
+      className="DiamondImg"
     >
-      <metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata>
       <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)" fill={cardFontRed} stroke="none">
         <path
           d="M4652 10884 c-35 -13 -80 -33 -100 -45 -50 -30 -4145 -4122 -4182
@@ -69,8 +69,8 @@ function HeartImg() {
       height="1189.000000pt"
       viewBox="0 0 1280.000000 1189.000000"
       preserveAspectRatio="xMidYMid meet"
+      className="HeartImg"
     >
-      <metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata>
       <g transform="translate(0.000000,1189.000000) scale(0.100000,-0.100000)" fill={cardFontRed} stroke="none">
         <path
           d="M2980 11763 c-848 -26 -1656 -457 -2177 -1163 -739 -1002 -839 -2418
@@ -96,8 +96,8 @@ function SpadeImg(): JSX.Element {
       height="1280.000000pt"
       viewBox="0 0 1137.000000 1280.000000"
       preserveAspectRatio="xMidYMid meet"
+      className="SpadeImg"
     >
-      <metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata>
       <g transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)" fill={cardFontBlack} stroke="none">
         <path
           d="M5627 12712 c-315 -496 -846 -1081 -1469 -1618 -336 -290 -572 -477
