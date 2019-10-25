@@ -6,7 +6,7 @@ import CardComponent from 'components/CardComponent';
 
 interface Props {}
 
-function App(props: Props) {
+function App(props: Props): JSX.Element {
   const [deck, setDeck] = useState<Card[]>([]);
 
   useEffect(() => {

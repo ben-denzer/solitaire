@@ -1,11 +1,19 @@
 import styled from 'styled-components';
-import { cardHeight, cardWidth, cardBorder } from 'styles/globalStyles';
-import { cardFaceColor, cardBackColor } from 'styles/colors';
-import { CardFace } from 'types/Card';
+import { cardHeight, cardWidth, cardBorder, cardFontSize } from 'styles/globalStyles';
+import { cardFaceColor, cardBackColor, cardFontBlack, cardFontRed } from 'styles/colors';
+import { CardFace, Suit } from 'types/Card';
 
 interface CardComponentStyleProps {
   face: CardFace;
+  suit: Suit;
 }
+
+const getFontColor = (suit: Suit): string => {
+  if (suit === 'CLUB' || suit === 'SPADE') {
+    return cardFontBlack;
+  }
+  return cardFontRed;
+};
 
 export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   position: relative;
@@ -16,34 +24,38 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 5px;
+  color: ${p => getFontColor(p.suit)};
 
   .topVal,
   .bottomVal {
     position: absolute;
-    font-size: 24px;
+    font-size: ${cardFontSize}px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
     svg {
-      height: 20px;
+      height: ${cardHeight / 8}px;
       width: auto;
     }
   }
 
   .topVal {
-    top: 5px;
-    left: 5px;
+    top: 0;
+    left: 2px;
   }
 
   .bottomVal {
-    bottom: 5px;
-    right: 5px;
+    bottom: 2px;
+    right: 2px;
   }
 
   .mainSuitImg {
     svg {
-      height: 40px;
+      height: ${cardHeight / 3.5}px;
       width: auto;
+      margin-top: ${cardHeight * 0.2};
     }
   }
 `;

@@ -1,29 +1,37 @@
 import React from 'react';
 import { CardComponentWrapper } from './CardComponent.style';
-import { Card } from 'types/Card';
-import SpadeImg from 'img/Spade';
+import { Card, Suit } from 'types/Card';
+import { ClubImg, DiamondImg, HeartImg, SpadeImg } from 'img/Suits';
 
 interface Props {
   card: Card;
 }
 
+const suitsMap: Record<Suit, JSX.Element> = {
+  CLUB: <ClubImg />,
+  DIAMOND: <DiamondImg />,
+  HEART: <HeartImg />,
+  SPADE: <SpadeImg />
+};
+
 function CardComponent(props: Props) {
   const { card } = props;
+
+  const SuitImg: JSX.Element = suitsMap[card.suit];
+
   return (
-    <CardComponentWrapper face={card.face}>
+    <CardComponentWrapper face={card.face} suit={card.suit}>
       {card.face === 'UP' ? (
         <>
           <div className="topVal">
             <span>{card.value}</span>
-            <SpadeImg />
+            {SuitImg}
           </div>
           <div className="bottomVal">
             <span>{card.value}</span>
-            <SpadeImg />
+            {SuitImg}
           </div>
-          <div className="mainSuitImg">
-            <SpadeImg />
-          </div>
+          <div className="mainSuitImg">{SuitImg}</div>
         </>
       ) : null}
     </CardComponentWrapper>

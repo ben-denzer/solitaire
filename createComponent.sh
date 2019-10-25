@@ -27,7 +27,7 @@ import { ${COMPONENT_NAME}Wrapper } from './${COMPONENT_NAME}.style';
 
 interface Props {}
 
-function $COMPONENT_NAME(props: Props) {
+function $COMPONENT_NAME(props: Props): JSX.Element {
   return (
     <${COMPONENT_NAME}Wrapper>$COMPONENT_NAME</${COMPONENT_NAME}Wrapper>
   );
