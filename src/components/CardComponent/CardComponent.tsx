@@ -20,7 +20,7 @@ function CardComponent(props: Props) {
   const SuitImg: JSX.Element = suitsMap[card.suit];
 
   return (
-    <CardComponentWrapper className="CardComponentWrapper" face={card.face} suit={card.suit}>
+    <CardComponentWrapper className="CardComponent" face={card.face} suit={card.suit}>
       {card.face === 'UP' ? (
         <>
           <div className="topVal">

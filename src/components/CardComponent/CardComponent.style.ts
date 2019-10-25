@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { cardHeight, cardWidth, cardBorder, cardFontSize } from 'styles/globalStyles';
+import { cardHeight, cardWidth, cardBorder, cardFontSize, cardBorderRadius } from 'styles/globalStyles';
 import { cardFaceColor, cardBackColor, cardFontBlack, cardFontRed } from 'styles/colors';
 import { CardFace, Suit } from 'types/Card';
 
@@ -24,7 +24,7 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
+  border-radius: ${cardBorderRadius}px;
   color: ${p => getFontColor(p.suit)};
 
   .topVal,
