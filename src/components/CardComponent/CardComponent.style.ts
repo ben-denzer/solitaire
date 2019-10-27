@@ -26,6 +26,7 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   align-items: center;
   border-radius: ${cardBorderRadius}px;
   color: ${p => getFontColor(p.suit)};
+  user-select: none;
 
   .topVal,
   .bottomVal {
