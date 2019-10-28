@@ -1,4 +1,4 @@
-import { Card, Suit, CardValue } from 'types/Card';
+import { Card, Suit, CardColor, CardDisplayValue } from 'types/Card';
 
 function createDeck(): Card[] {
   const deck: Card[] = [];
@@ -6,15 +6,19 @@ function createDeck(): Card[] {
 
   for (let suit of suitArray) {
     for (let i = 1; i <= 13; i++) {
-      const valueMap: Record<string, CardValue> = {
+      const valueMap: Record<string, CardDisplayValue> = {
         1: 'A',
         11: 'J',
         12: 'Q',
         13: 'K'
       };
 
-      const value: CardValue = valueMap[i.toString()] || i.toString();
-      deck.push({ suit, value, face: 'DOWN' });
+      const displayValue: CardDisplayValue = valueMap[i.toString()] || i.toString();
+      let cardColor: CardColor = 'BLACK';
+      if (suit === 'DIAMOND' || suit === 'HEART') {
+        cardColor = 'RED';
+      }
+      deck.push({ cardColor, displayValue, face: 'DOWN', suit, val: i });
     }
   }
   return deck;
