@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { GameBoardWrapper, CardPile } from './GameBoard.style';
-import { Card } from 'types/Card';
+import { Card, CardDragItem } from 'types/Card';
 import { shuffleDeck, createDeck } from 'utils/deck';
-import { Board } from 'types/Board';
+import { Board, Foundation } from 'types/Board';
 import CardComponent from 'components/CardComponent';
+import FoundationPile from 'components/FoundationPile';
 
 interface Props {}
 
@@ -20,7 +21,7 @@ function GameBoard(props: Props): JSX.Element {
   const [board, setBoard] = useState<Board | null>(null);
 
   const deal = () => {
-    const deck: Card[] = shuffleDeck(createDeck()).slice(0, 5);
+    const deck: Card[] = shuffleDeck(createDeck());
     const tempBoard: Board = {
       stock: deck,
       waste: [],
@@ -34,6 +35,49 @@ function GameBoard(props: Props): JSX.Element {
       history: []
     };
     setBoard(tempBoard);
+  };
+
+  const dropCardIntoFoundation = (cardDragObj: CardDragItem, foundationIndex: number): void => {
+    if (!board) {
+      return;
+    }
+
+    let nextBoard: Board = {
+      ...board,
+      history: [...board.history, board]
+    };
+
+    let cardToMove: Card | null = null;
+
+    // check the waste first to see if the dropped card is from there
+    if (board.waste.length) {
+      const topWasteCard = board.waste[0];
+      if (topWasteCard.val === cardDragObj.value && topWasteCard.suit === cardDragObj.suit) {
+        cardToMove = topWasteCard;
+        nextBoard.waste = nextBoard.waste.slice(1);
+      }
+    }
+
+    // check the other foundations
+    // this can only be someone moving an Ace from one foundation to the other
+    if (cardDragObj.value === 1) {
+      for (let i = 0; i < board.foundations.length; i++) {
+        let { pile } = nextBoard.foundations[i];
+        if (pile.length === 1 && pile[0].suit === cardDragObj.suit) {
+          cardToMove = pile[0];
+          nextBoard.foundations[i] = { suit: null, pile: [] };
+        }
+      }
+    }
+
+    if (cardToMove) {
+      nextBoard.foundations[foundationIndex] = {
+        suit: cardToMove.suit,
+        pile: [cardToMove, ...nextBoard.foundations[foundationIndex].pile]
+      };
+    }
+    console.log('moving', nextBoard.foundations);
+    setBoard(nextBoard);
   };
 
   const flipCardFromStock = (): void => {
@@ -68,6 +112,20 @@ function GameBoard(props: Props): JSX.Element {
     deal();
   }, []);
 
+  const foundations =
+    board &&
+    board.foundations.map((foundation: Foundation, index: number) => {
+      return (
+        <FoundationPile
+          key={index}
+          dropCardIntoFoundation={dropCardIntoFoundation}
+          foundationIndex={index}
+          suit={foundation.suit}
+          pile={foundation.pile}
+        />
+      );
+    });
+
   return (
     <GameBoardWrapper className="GameBoard">
       <div className="topRow">
@@ -82,12 +140,9 @@ function GameBoard(props: Props): JSX.Element {
             {board && Boolean(board.waste.length) && <CardComponent card={board.waste[0]} />}
           </CardPile>
         </div>
-        <div className="topRowRight">
-          <CardPile count={0} className="foundation"></CardPile>
-          <CardPile count={0} className="foundation"></CardPile>
-          <CardPile count={0} className="foundation"></CardPile>
-          <CardPile count={0} className="foundation"></CardPile>
-        </div>
+
+        {/* FOUNDATIONS */}
+        <div className="topRowRight">{foundations}</div>
       </div>
     </GameBoardWrapper>
   );

@@ -28,6 +28,7 @@ export const GameBoardWrapper = styled.div`
 
 interface CardPileProps {
   count: number;
+  highlightDropZone?: boolean;
 }
 
 export const CardPile = styled.div<CardPileProps>`
@@ -36,4 +37,5 @@ export const CardPile = styled.div<CardPileProps>`
   border: ${cardPileBorder};
   margin: 5px 8px;
   border-radius: ${cardBorderRadius}px;
+  background-color: ${p => (p.highlightDropZone ? 'yellow' : 'none')};
 `;

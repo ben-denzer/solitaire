@@ -1,17 +1,11 @@
 import React from 'react';
 import { CardComponentWrapper } from './CardComponent.style';
-import { Card, Suit, CardColor } from 'types/Card';
+import { Card, Suit, CardDragItem } from 'types/Card';
 import { ClubImg, DiamondImg, HeartImg, SpadeImg } from 'img/Suits';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
 
 interface Props {
   card: Card;
-}
-
-interface CardDragItem {
-  type: 'CARD';
-  cardColor: CardColor;
-  value: number;
 }
 
 const suitsMap: Record<Suit, JSX.Element> = {
@@ -27,6 +21,7 @@ function CardComponent(props: Props) {
   const dragItem: CardDragItem = {
     type: 'CARD',
     cardColor: card.cardColor,
+    suit: card.suit,
     value: card.val
   };
 
@@ -39,8 +34,17 @@ function CardComponent(props: Props) {
 
   const SuitImg: JSX.Element = suitsMap[card.suit];
 
+  if (isDragging) {
+    return null;
+  }
+
   return (
-    <CardComponentWrapper className="CardComponent" face={card.face} suit={card.suit} ref={drag}>
+    <CardComponentWrapper
+      className="CardComponent"
+      face={card.face}
+      suit={card.suit}
+      ref={card.face === 'UP' ? drag : null}
+    >
       {card.face === 'UP' ? (
         <>
           <div className="topVal">

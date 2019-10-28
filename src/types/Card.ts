@@ -10,6 +10,13 @@ export type CardColor = 'BLACK' | 'RED';
 
 export type CardDisplayValue = 'A' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K';
 
+export interface CardDragItem {
+  type: 'CARD';
+  cardColor: CardColor;
+  suit: Suit;
+  value: number;
+}
+
 export type CardFace = 'DOWN' | 'UP';
 
 export type Suit = 'SPADE' | 'DIAMOND' | 'HEART' | 'CLUB';

@@ -1,6 +1,6 @@
 import { Card, Suit } from './Card';
 
-interface Foundation {
+export interface Foundation {
   suit: Suit | null;
   pile: Card[];
 }
