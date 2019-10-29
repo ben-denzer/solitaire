@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GameBoardWrapper, CardPile } from './GameBoard.style';
 import { Card, CardDragItem } from 'types/Card';
-import { shuffleDeck, createDeck } from 'utils/deck';
+import { shuffleAndDeal } from 'utils/deck';
 import { Board, Foundation } from 'types/Board';
 import CardComponent from 'components/CardComponent';
 import FoundationPile from 'components/FoundationPile';
@@ -20,22 +20,9 @@ interface Props {}
 function GameBoard(props: Props): JSX.Element {
   const [board, setBoard] = useState<Board | null>(null);
 
-  const deal = () => {
-    const deck: Card[] = shuffleDeck(createDeck());
-    const tempBoard: Board = {
-      stock: deck,
-      waste: [],
-      foundations: [
-        { suit: null, pile: [] },
-        { suit: null, pile: [] },
-        { suit: null, pile: [] },
-        { suit: null, pile: [] }
-      ],
-      tableau: [],
-      history: []
-    };
-    setBoard(tempBoard);
-  };
+  useEffect(() => {
+    setBoard(shuffleAndDeal());
+  }, []);
 
   const dropCardIntoFoundation = (cardDragObj: CardDragItem, foundationIndex: number): void => {
     if (!board) {
@@ -76,7 +63,6 @@ function GameBoard(props: Props): JSX.Element {
         pile: [cardToMove, ...nextBoard.foundations[foundationIndex].pile]
       };
     }
-    console.log('moving', nextBoard.foundations);
     setBoard(nextBoard);
   };
 
@@ -107,10 +93,6 @@ function GameBoard(props: Props): JSX.Element {
     };
     setBoard(nextBoard);
   };
-
-  useEffect(() => {
-    deal();
-  }, []);
 
   const foundations =
     board &&

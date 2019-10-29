@@ -1,4 +1,5 @@
 import { Card, Suit, CardColor, CardDisplayValue } from 'types/Card';
+import { Board } from 'types/Board';
 
 function createDeck(): Card[] {
   const deck: Card[] = [];
@@ -45,4 +46,48 @@ function shuffleDeck(deck: Card[]): Card[] {
   return tempDeck;
 }
 
-export { createDeck, shuffleDeck };
+function shuffleAndDeal(): Board {
+  let deck: Card[] = shuffleDeck(createDeck());
+
+  // 7 columns
+  const tableau: Card[][] = [[], [], [], [], [], [], []];
+
+  // go 7 rows deep
+  for (let i = 0; i < 7; i++) {
+    // go 7 columns across
+    for (let j = 0; j < 7; j++) {
+      // the first column has one card, 2nd col has 2 cards, etc
+      if (j < i) {
+        continue;
+      }
+
+      // take the top card from the deck
+      const card: Card = deck[0];
+      deck = deck.slice(1);
+
+      // set the 1st card face up each time through the loop
+      if (j === i) {
+        card.face = 'UP';
+      }
+
+      tableau[j].unshift(card);
+    }
+  }
+
+  const tempBoard: Board = {
+    stock: deck,
+    waste: [],
+    foundations: [
+      { suit: null, pile: [] },
+      { suit: null, pile: [] },
+      { suit: null, pile: [] },
+      { suit: null, pile: [] }
+    ],
+    tableau,
+    history: []
+  };
+
+  return tempBoard;
+}
+
+export { createDeck, shuffleDeck, shuffleAndDeal };
