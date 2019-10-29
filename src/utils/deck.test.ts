@@ -25,7 +25,7 @@ describe('shuffleDeck', () => {
     const deck: Card[] = createDeck();
     const shuffled: Card[] = shuffleDeck(deck);
     for (let i = 0; i < shuffled.length; i++) {
-      if (shuffled[i].suit !== deck[i].suit || shuffled[i].value !== deck[i].value) {
+      if (shuffled[i].suit !== deck[i].suit || shuffled[i].val !== deck[i].val) {
         return;
       }
     }
