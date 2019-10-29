@@ -7,6 +7,7 @@ interface CardComponentStyleProps {
   face: CardFace;
   suit: Suit;
   inTableauPile?: boolean;
+  onTopOfAnotherCard?: boolean;
 }
 
 const getFontColor = (suit: Suit): string => {
@@ -28,7 +29,15 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   border-radius: ${cardBorderRadius}px;
   color: ${p => getFontColor(p.suit)};
   user-select: none;
-  margin-top: ${p => (p.inTableauPile ? (cardHeight - 20) * -1 + 'px' : 0)};
+  margin-top: ${p => {
+    if (p.inTableauPile) {
+      return (cardHeight - 20) * -1 + 'px';
+    }
+    if (p.onTopOfAnotherCard) {
+      return cardHeight * -1 + 'px';
+    }
+    return 0;
+  }};
 
   :first-child {
     margin-top: 0;

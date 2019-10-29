@@ -7,6 +7,7 @@ import { useDrag, DragSourceMonitor } from 'react-dnd';
 interface Props {
   card: Card;
   inTableauPile?: boolean;
+  onTopOfAnotherCard?: boolean;
 }
 
 const suitsMap: Record<Suit, JSX.Element> = {
@@ -17,7 +18,7 @@ const suitsMap: Record<Suit, JSX.Element> = {
 };
 
 function CardComponent(props: Props) {
-  const { card, inTableauPile } = props;
+  const { card, inTableauPile, onTopOfAnotherCard } = props;
 
   const dragItem: CardDragItem = {
     type: 'CARD',
@@ -45,6 +46,7 @@ function CardComponent(props: Props) {
       face={card.face}
       suit={card.suit}
       inTableauPile={inTableauPile}
+      onTopOfAnotherCard={onTopOfAnotherCard}
       ref={card.face === 'UP' ? drag : null}
     >
       {card.face === 'UP' ? (
