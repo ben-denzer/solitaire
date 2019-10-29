@@ -24,6 +24,13 @@ export const GameBoardWrapper = styled.div`
       justify-content: flex-end;
     }
   }
+
+  .bottomSection {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 25px;
+    min-height: ${cardHeight * 5}px;
+  }
 `;
 
 interface CardPileProps {

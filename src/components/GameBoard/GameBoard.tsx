@@ -5,6 +5,7 @@ import { shuffleAndDeal } from 'utils/deck';
 import { Board, Foundation } from 'types/Board';
 import CardComponent from 'components/CardComponent';
 import FoundationPile from 'components/FoundationPile';
+import TableauPile from 'components/TableauPile';
 
 interface Props {}
 
@@ -53,6 +54,21 @@ function GameBoard(props: Props): JSX.Element {
         if (pile.length === 1 && pile[0].suit === cardDragObj.suit) {
           cardToMove = pile[0];
           nextBoard.foundations[i] = { suit: null, pile: [] };
+        }
+      }
+    }
+
+    // check the tableau piles
+    // this can only be one card at a time
+    for (let i = 0; i < nextBoard.tableau.length; i++) {
+      const pile = nextBoard.tableau[i];
+      if (pile.length && pile[0].suit === cardDragObj.suit && pile[0].val === cardDragObj.value) {
+        cardToMove = pile[0];
+        nextBoard.tableau[i] = pile.slice(1);
+
+        // flip the next remaining card up if needed
+        if (nextBoard.tableau[i].length && nextBoard.tableau[i][0].face === 'DOWN') {
+          nextBoard.tableau[i][0].face = 'UP';
         }
       }
     }
@@ -108,6 +124,15 @@ function GameBoard(props: Props): JSX.Element {
       );
     });
 
+  const tableauPiles =
+    board &&
+    board.tableau.length &&
+    board.tableau.map(
+      (pile: Card[], index: number): JSX.Element => {
+        return <TableauPile key={index} pile={pile} />;
+      }
+    );
+
   return (
     <GameBoardWrapper className="GameBoard">
       <div className="topRow">
@@ -125,6 +150,11 @@ function GameBoard(props: Props): JSX.Element {
 
         {/* FOUNDATIONS */}
         <div className="topRowRight">{foundations}</div>
+      </div>
+
+      <div className="bottomSection">
+        {/* TABLEAU */}
+        {tableauPiles}
       </div>
     </GameBoardWrapper>
   );
