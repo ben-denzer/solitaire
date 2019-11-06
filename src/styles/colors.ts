@@ -11,5 +11,6 @@ export const cardPileBorderColor = darkGray;
 export const cardBorderColor = 'black';
 export const cardFaceColor = 'white';
 export const cardBackColor = 'green';
+export const cardHighlightColor = 'yellow';
 export const cardFontRed = 'red';
 export const cardFontBlack = 'black';

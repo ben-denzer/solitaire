@@ -6,8 +6,9 @@ import { useDrag, DragSourceMonitor } from 'react-dnd';
 
 interface Props {
   card: Card;
-  inTableauPile?: boolean;
   coverTheCardBelow?: boolean;
+  highlightForDrop?: boolean;
+  inTableauPile?: boolean;
 }
 
 const suitsMap: Record<Suit, JSX.Element> = {
@@ -18,7 +19,7 @@ const suitsMap: Record<Suit, JSX.Element> = {
 };
 
 function CardComponent(props: Props) {
-  const { card, inTableauPile } = props;
+  const { card, coverTheCardBelow, highlightForDrop, inTableauPile } = props;
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const dragItem: CardDragItem = {
@@ -45,7 +46,8 @@ function CardComponent(props: Props) {
       inTableauPile={inTableauPile}
       ref={card.face === 'UP' ? drag : null}
       isDragging={isDragging}
-      coverTheCardBelow={props.coverTheCardBelow}
+      coverTheCardBelow={coverTheCardBelow}
+      highlightForDrop={highlightForDrop}
     >
       {card.face === 'UP' ? (
         <>

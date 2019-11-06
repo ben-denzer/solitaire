@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { cardHeight, cardWidth, cardBorderRadius, cardPileBorder } from 'styles/globalStyles';
-import { gameBoardBgColor } from 'styles/colors';
+import { gameBoardBgColor, cardHighlightColor } from 'styles/colors';
 
 export const GameBoardWrapper = styled.div`
   display: flex;
@@ -44,5 +44,5 @@ export const CardPile = styled.div<CardPileProps>`
   border: ${cardPileBorder};
   margin: 5px 8px;
   border-radius: ${cardBorderRadius}px;
-  background-color: ${p => (p.highlightDropZone ? 'yellow' : 'none')};
+  background-color: ${p => (p.highlightDropZone ? cardHighlightColor : 'none')};
 `;

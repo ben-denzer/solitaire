@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { cardHeight, cardWidth, cardBorder, cardFontSize, cardBorderRadius } from 'styles/globalStyles';
-import { cardFaceColor, cardBackColor, cardFontBlack, cardFontRed } from 'styles/colors';
+import { cardFaceColor, cardBackColor, cardFontBlack, cardFontRed, cardHighlightColor } from 'styles/colors';
 import { CardFace, Suit } from 'types/Card';
 
 interface CardComponentStyleProps {
@@ -9,6 +9,7 @@ interface CardComponentStyleProps {
   isDragging: boolean;
   inTableauPile?: boolean;
   coverTheCardBelow?: boolean;
+  highlightForDrop?: boolean;
 }
 
 const getFontColor = (suit: Suit): string => {
@@ -20,12 +21,19 @@ const getFontColor = (suit: Suit): string => {
 
 const getOpacity = (isDragging: boolean): string => (isDragging ? '.3' : '1');
 
+const getBackgroundColor = (face: CardFace, highlight?: boolean): string => {
+  if (face === 'DOWN') {
+    return cardBackColor;
+  }
+  return highlight ? cardHighlightColor : cardFaceColor;
+};
+
 export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   position: relative;
   height: ${cardHeight}px;
   width: ${cardWidth}px;
   border: ${cardBorder};
-  background: ${p => (p.face === 'DOWN' ? cardBackColor : cardFaceColor)};
+  background: ${p => getBackgroundColor(p.face, p.highlightForDrop)};
   display: flex;
   justify-content: center;
   align-items: center;

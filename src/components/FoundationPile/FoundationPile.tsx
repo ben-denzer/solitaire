@@ -42,7 +42,9 @@ function FoundationPile(props: Props): JSX.Element {
     <CardPile count={pile.length} ref={drop} highlightDropZone={canDrop && isOver}>
       {/* Have a 2nd card underneath to show when dragging */}
       {pile.length > 1 && <CardComponent card={pile[1]} />}
-      {Boolean(pile.length) && <CardComponent card={pile[0]} coverTheCardBelow={true} />}
+      {Boolean(pile.length) && (
+        <CardComponent card={pile[0]} coverTheCardBelow={true} highlightForDrop={canDrop && isOver} />
+      )}
     </CardPile>
   );
 }
