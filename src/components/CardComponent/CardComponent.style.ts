@@ -10,6 +10,7 @@ interface CardComponentStyleProps {
   inTableauPile?: boolean;
   coverTheCardBelow?: boolean;
   highlightForDrop?: boolean;
+  isHighestFaceUpCardInTableau?: boolean;
 }
 
 const getFontColor = (suit: Suit): string => {
@@ -42,7 +43,11 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   user-select: none;
   margin-top: ${p => {
     if (p.inTableauPile) {
-      return (cardHeight - 20) * -1 + 'px';
+      if (p.face === 'UP' && !p.isHighestFaceUpCardInTableau) {
+        return (cardHeight - 30) * -1 + 'px';
+      } else {
+        return (cardHeight - 10) * -1 + 'px';
+      }
     }
     if (p.coverTheCardBelow) {
       return cardHeight * -1 + 'px';
@@ -66,6 +71,7 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
     svg {
       height: ${cardHeight / 8}px;
       width: auto;
+      margin-top: -3px;
     }
   }
 

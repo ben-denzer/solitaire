@@ -44,13 +44,35 @@ function TableauPile(props: Props): JSX.Element {
     })
   });
 
-  const cardStack: JSX.Element[] = [...pile].reverse().map((card: Card, index: number) => {
-    // highlight the bottom card when drop is possible
-    if (isOver && canDrop && index === pile.length - 1) {
-      return <CardComponent key={card.val + card.suit} card={card} inTableauPile={true} highlightForDrop={true} />;
+  const reversedPile = [...pile].reverse();
+
+  const cardStack: JSX.Element[] = reversedPile.map((card: Card, index: number) => {
+    let isHighestFaceUpCardInTableau = false;
+    if (index > 0 && card.face === 'UP' && reversedPile[index - 1].face === 'DOWN') {
+      isHighestFaceUpCardInTableau = true;
     }
 
-    return <CardComponent key={card.val + card.suit} card={card} inTableauPile={true} />;
+    // highlight the bottom card when drop is possible
+    if (isOver && canDrop && index === pile.length - 1) {
+      return (
+        <CardComponent
+          key={card.val + card.suit}
+          card={card}
+          inTableauPile={true}
+          highlightForDrop={true}
+          isHighestFaceUpCardInTableau={isHighestFaceUpCardInTableau}
+        />
+      );
+    }
+
+    return (
+      <CardComponent
+        key={card.val + card.suit}
+        card={card}
+        inTableauPile={true}
+        isHighestFaceUpCardInTableau={isHighestFaceUpCardInTableau}
+      />
+    );
   });
 
   return (

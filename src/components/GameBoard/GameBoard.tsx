@@ -18,8 +18,18 @@ interface Props {}
   The Tableau: The seven piles that make up the main table.
  */
 
+const checkWonGame = (foundations: Foundation[]): boolean => {
+  for (let foundation of foundations) {
+    if (foundation.pile.length < 13) {
+      return false;
+    }
+  }
+  return true;
+};
+
 function GameBoard(props: Props): JSX.Element {
   const [board, setBoard] = useState<Board | null>(null);
+  const [wonGame, setWonGame] = useState<boolean>(false);
 
   useEffect(() => {
     setBoard(shuffleAndDeal());
@@ -86,6 +96,7 @@ function GameBoard(props: Props): JSX.Element {
         pile: [cardToMove, ...nextBoard.foundations[foundationIndex].pile]
       };
       setBoard(nextBoard);
+      setWonGame(checkWonGame(nextBoard.foundations));
     }
   };
 
@@ -209,6 +220,10 @@ function GameBoard(props: Props): JSX.Element {
         return <TableauPile key={index} tableauIndex={index} pile={pile} dropCardIntoTableau={dropCardIntoTableau} />;
       }
     );
+
+  if (wonGame) {
+    return <div>You Won!!</div>;
+  }
 
   return (
     <GameBoardWrapper className="GameBoard">

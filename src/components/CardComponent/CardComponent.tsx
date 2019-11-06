@@ -9,6 +9,7 @@ interface Props {
   coverTheCardBelow?: boolean;
   highlightForDrop?: boolean;
   inTableauPile?: boolean;
+  isHighestFaceUpCardInTableau?: boolean;
 }
 
 const suitsMap: Record<Suit, JSX.Element> = {
@@ -19,7 +20,7 @@ const suitsMap: Record<Suit, JSX.Element> = {
 };
 
 function CardComponent(props: Props) {
-  const { card, coverTheCardBelow, highlightForDrop, inTableauPile } = props;
+  const { card, coverTheCardBelow, highlightForDrop, isHighestFaceUpCardInTableau, inTableauPile } = props;
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const dragItem: CardDragItem = {
@@ -48,6 +49,7 @@ function CardComponent(props: Props) {
       isDragging={isDragging}
       coverTheCardBelow={coverTheCardBelow}
       highlightForDrop={highlightForDrop}
+      isHighestFaceUpCardInTableau={isHighestFaceUpCardInTableau}
     >
       {card.face === 'UP' ? (
         <>
