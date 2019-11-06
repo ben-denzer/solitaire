@@ -48,27 +48,34 @@ function GameBoard(props: Props): JSX.Element {
 
     // check the other foundations
     // this can only be someone moving an Ace from one foundation to the other
-    if (cardDragObj.value === 1) {
-      for (let i = 0; i < board.foundations.length; i++) {
-        let { pile } = nextBoard.foundations[i];
-        if (pile.length === 1 && pile[0].suit === cardDragObj.suit) {
-          cardToMove = pile[0];
-          nextBoard.foundations[i] = { suit: null, pile: [] };
+    if (!cardToMove) {
+      if (cardDragObj.value === 1) {
+        for (let i = 0; i < board.foundations.length; i++) {
+          let { pile } = nextBoard.foundations[i];
+          if (pile.length === 1 && pile[0].suit === cardDragObj.suit) {
+            cardToMove = pile[0];
+            nextBoard.foundations[i] = { suit: null, pile: [] };
+          }
         }
       }
     }
 
     // check the tableau piles
-    // this can only be one card at a time
-    for (let i = 0; i < nextBoard.tableau.length; i++) {
-      const pile = nextBoard.tableau[i];
-      if (pile.length && pile[0].suit === cardDragObj.suit && pile[0].val === cardDragObj.value) {
-        cardToMove = pile[0];
-        nextBoard.tableau[i] = pile.slice(1);
+    // foundation piles only allow a single card at a time, so check pile[0]
+    if (!cardToMove) {
+      for (let i = 0; i < nextBoard.tableau.length; i++) {
+        if (cardToMove) {
+          break;
+        }
+        const pile = nextBoard.tableau[i];
+        if (pile.length && pile[0].suit === cardDragObj.suit && pile[0].val === cardDragObj.value) {
+          cardToMove = pile[0];
+          nextBoard.tableau[i] = pile.slice(1);
 
-        // flip the next remaining card up if needed
-        if (nextBoard.tableau[i].length && nextBoard.tableau[i][0].face === 'DOWN') {
-          nextBoard.tableau[i][0].face = 'UP';
+          // flip the next remaining card up if needed
+          if (nextBoard.tableau[i].length && nextBoard.tableau[i][0].face === 'DOWN') {
+            nextBoard.tableau[i][0].face = 'UP';
+          }
         }
       }
     }
@@ -78,8 +85,78 @@ function GameBoard(props: Props): JSX.Element {
         suit: cardToMove.suit,
         pile: [cardToMove, ...nextBoard.foundations[foundationIndex].pile]
       };
+      setBoard(nextBoard);
     }
-    setBoard(nextBoard);
+  };
+
+  const dropCardIntoTableau = (cardDragObj: CardDragItem, tableauIndex: number) => {
+    if (!board) {
+      return;
+    }
+
+    let nextBoard: Board = {
+      ...board,
+      history: [...board.history, board]
+    };
+
+    let cardToMove: Card | null = null;
+
+    // check the waste first to see if the dropped card is from there
+    if (board.waste.length) {
+      const topWasteCard = board.waste[0];
+      if (topWasteCard.val === cardDragObj.value && topWasteCard.suit === cardDragObj.suit) {
+        cardToMove = topWasteCard;
+        nextBoard.waste = nextBoard.waste.slice(1);
+      }
+    }
+
+    // check the foundations
+    if (!cardToMove) {
+      for (let i = 0; i < board.foundations.length; i++) {
+        let { pile } = nextBoard.foundations[i];
+        if (pile.length >= 1 && pile[0].suit === cardDragObj.suit && cardDragObj.value === pile[0].val) {
+          cardToMove = pile[0];
+          nextBoard.foundations[i] = { suit: null, pile: [] };
+        }
+      }
+    }
+
+    // check the tableau piles
+    if (!cardToMove) {
+      for (let i = 0; i < nextBoard.tableau.length; i++) {
+        // stop the loop when the card is found
+        if (cardToMove) {
+          break;
+        }
+        // don't check the tableau that we are dropping into
+        if (i === tableauIndex) {
+          continue;
+        }
+
+        const pile = nextBoard.tableau[i];
+        if (pile.length) {
+          for (let j = 0; j < pile.length; j++) {
+            // stop the loop when a card is found
+            if (cardToMove) {
+              break;
+            }
+            if (pile[j].val === cardDragObj.value && pile[j].suit === cardDragObj.suit) {
+              cardToMove = pile[j];
+              nextBoard.tableau[i] = nextBoard.tableau[i].slice(j + 1);
+            }
+            // flip the next card up if needed
+            if (nextBoard.tableau[i].length && nextBoard.tableau[i][0].face === 'DOWN') {
+              nextBoard.tableau[i][0].face = 'UP';
+            }
+          }
+        }
+      }
+    }
+
+    if (cardToMove) {
+      nextBoard.tableau[tableauIndex].unshift(cardToMove);
+      setBoard(nextBoard);
+    }
   };
 
   const flipCardFromStock = (): void => {
@@ -129,7 +206,7 @@ function GameBoard(props: Props): JSX.Element {
     board.tableau.length &&
     board.tableau.map(
       (pile: Card[], index: number): JSX.Element => {
-        return <TableauPile key={index} pile={pile} />;
+        return <TableauPile key={index} tableauIndex={index} pile={pile} dropCardIntoTableau={dropCardIntoTableau} />;
       }
     );
 
