@@ -99,33 +99,33 @@ function GameBoard(props: Props): JSX.Element {
       history: [...board.history, board]
     };
 
-    let cardToMove: Card | null = null;
+    let cardsToMove: Card[] = [];
 
     // check the waste first to see if the dropped card is from there
     if (board.waste.length) {
       const topWasteCard = board.waste[0];
       if (topWasteCard.val === cardDragObj.value && topWasteCard.suit === cardDragObj.suit) {
-        cardToMove = topWasteCard;
+        cardsToMove = [topWasteCard];
         nextBoard.waste = nextBoard.waste.slice(1);
       }
     }
 
     // check the foundations
-    if (!cardToMove) {
+    if (!cardsToMove.length) {
       for (let i = 0; i < board.foundations.length; i++) {
         let { pile } = nextBoard.foundations[i];
         if (pile.length >= 1 && pile[0].suit === cardDragObj.suit && cardDragObj.value === pile[0].val) {
-          cardToMove = pile[0];
+          cardsToMove = [pile[0]];
           nextBoard.foundations[i] = { suit: null, pile: [] };
         }
       }
     }
 
     // check the tableau piles
-    if (!cardToMove) {
+    if (!cardsToMove.length) {
       for (let i = 0; i < nextBoard.tableau.length; i++) {
         // stop the loop when the card is found
-        if (cardToMove) {
+        if (cardsToMove && cardsToMove.length) {
           break;
         }
         // don't check the tableau that we are dropping into
@@ -137,11 +137,11 @@ function GameBoard(props: Props): JSX.Element {
         if (pile.length) {
           for (let j = 0; j < pile.length; j++) {
             // stop the loop when a card is found
-            if (cardToMove) {
+            if (cardsToMove.length) {
               break;
             }
             if (pile[j].val === cardDragObj.value && pile[j].suit === cardDragObj.suit) {
-              cardToMove = pile[j];
+              cardsToMove = [...pile.slice(0, j + 1)];
               nextBoard.tableau[i] = nextBoard.tableau[i].slice(j + 1);
             }
             // flip the next card up if needed
@@ -153,8 +153,8 @@ function GameBoard(props: Props): JSX.Element {
       }
     }
 
-    if (cardToMove) {
-      nextBoard.tableau[tableauIndex].unshift(cardToMove);
+    if (cardsToMove.length) {
+      nextBoard.tableau[tableauIndex] = [...cardsToMove, ...nextBoard.tableau[tableauIndex]];
       setBoard(nextBoard);
     }
   };
