@@ -6,8 +6,9 @@ import { CardFace, Suit } from 'types/Card';
 interface CardComponentStyleProps {
   face: CardFace;
   suit: Suit;
+  isDragging: boolean;
   inTableauPile?: boolean;
-  onTopOfAnotherCard?: boolean;
+  coverTheCardBelow?: boolean;
 }
 
 const getFontColor = (suit: Suit): string => {
@@ -16,6 +17,8 @@ const getFontColor = (suit: Suit): string => {
   }
   return cardFontRed;
 };
+
+const getOpacity = (isDragging: boolean): string => (isDragging ? '.3' : '1');
 
 export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   position: relative;
@@ -33,7 +36,7 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
     if (p.inTableauPile) {
       return (cardHeight - 20) * -1 + 'px';
     }
-    if (p.onTopOfAnotherCard) {
+    if (p.coverTheCardBelow) {
       return cardHeight * -1 + 'px';
     }
     return 0;
@@ -50,6 +53,7 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
+    opacity: ${p => getOpacity(p.isDragging)};
 
     svg {
       height: ${cardHeight / 8}px;
@@ -68,6 +72,8 @@ export const CardComponentWrapper = styled.div<CardComponentStyleProps>`
   }
 
   .mainSuitImg {
+    opacity: ${p => getOpacity(p.isDragging)};
+
     svg {
       height: ${cardHeight / 3.5}px;
       width: auto;

@@ -145,8 +145,8 @@ function GameBoard(props: Props): JSX.Element {
           {/* WASTE */}
           <CardPile count={0} className="waste">
             {/* have a 2nd card underneath to show when dragging */}
-            {board && board.waste.length > 1 && <CardComponent card={board.waste[1]} onTopOfAnotherCard={true} />}
-            {board && Boolean(board.waste.length) && <CardComponent card={board.waste[0]} onTopOfAnotherCard={true} />}
+            {board && board.waste.length > 1 && <CardComponent card={board.waste[1]} coverTheCardBelow={true} />}
+            {board && Boolean(board.waste.length) && <CardComponent card={board.waste[0]} coverTheCardBelow={true} />}
           </CardPile>
         </div>
 

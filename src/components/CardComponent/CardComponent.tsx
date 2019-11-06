@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CardComponentWrapper } from './CardComponent.style';
 import { Card, Suit, CardDragItem } from 'types/Card';
 import { ClubImg, DiamondImg, HeartImg, SpadeImg } from 'img/Suits';
@@ -7,7 +7,7 @@ import { useDrag, DragSourceMonitor } from 'react-dnd';
 interface Props {
   card: Card;
   inTableauPile?: boolean;
-  onTopOfAnotherCard?: boolean;
+  coverTheCardBelow?: boolean;
 }
 
 const suitsMap: Record<Suit, JSX.Element> = {
@@ -18,7 +18,8 @@ const suitsMap: Record<Suit, JSX.Element> = {
 };
 
 function CardComponent(props: Props) {
-  const { card, inTableauPile, onTopOfAnotherCard } = props;
+  const { card, inTableauPile } = props;
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const dragItem: CardDragItem = {
     type: 'CARD',
@@ -27,18 +28,14 @@ function CardComponent(props: Props) {
     value: card.val
   };
 
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     item: dragItem,
-    collect: (monitor: DragSourceMonitor) => ({
-      isDragging: !!monitor.isDragging()
-    })
+    collect: (monitor: DragSourceMonitor) => {
+      setIsDragging(!!monitor.isDragging());
+    }
   });
 
   const SuitImg: JSX.Element = suitsMap[card.suit];
-
-  if (isDragging) {
-    return null;
-  }
 
   return (
     <CardComponentWrapper
@@ -46,8 +43,9 @@ function CardComponent(props: Props) {
       face={card.face}
       suit={card.suit}
       inTableauPile={inTableauPile}
-      onTopOfAnotherCard={onTopOfAnotherCard}
       ref={card.face === 'UP' ? drag : null}
+      isDragging={isDragging}
+      coverTheCardBelow={props.coverTheCardBelow}
     >
       {card.face === 'UP' ? (
         <>
