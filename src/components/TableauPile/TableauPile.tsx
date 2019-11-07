@@ -76,7 +76,12 @@ function TableauPile(props: Props): JSX.Element {
   });
 
   return (
-    <TableauPileWrapper className="TableauPile" empty={pile.length === 0} ref={drop}>
+    <TableauPileWrapper
+      className="TableauPile"
+      empty={pile.length === 0}
+      ref={drop}
+      highlightForDrop={!pile.length && isOver && canDrop}
+    >
       {cardStack}
     </TableauPileWrapper>
   );
