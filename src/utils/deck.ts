@@ -87,6 +87,8 @@ function shuffleAndDeal(): Board {
     history: []
   };
 
+  tempBoard.history = [{ ...tempBoard }];
+
   return tempBoard;
 }
 

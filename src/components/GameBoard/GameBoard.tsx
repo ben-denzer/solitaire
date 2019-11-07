@@ -54,6 +54,14 @@ function GameBoard(props: Props): JSX.Element {
     setBoard(nextBoard);
   };
 
+  const undo = () => {
+    if (!board || !board.history || board.history.length <= 1) {
+      return;
+    }
+    const nextBoard = board.history[board.history.length - 1];
+    setBoard(nextBoard);
+  };
+
   const flipCardFromStock = (): void => {
     if (!board) {
       return;
@@ -63,7 +71,7 @@ function GameBoard(props: Props): JSX.Element {
         const nextStock: Card[] = board.waste.reverse().map((card: Card) => ({ ...card, face: 'DOWN' }));
         const nextBoard = {
           ...board,
-          history: [...board.history, board],
+          history: [...board.history, JSON.parse(JSON.stringify(board))],
           stock: nextStock,
           waste: []
         };
@@ -75,7 +83,7 @@ function GameBoard(props: Props): JSX.Element {
     const cardToFlip: Card = { ...board.stock[0], face: 'UP' };
     const nextBoard = {
       ...board,
-      history: [...board.history, board],
+      history: [...board.history, { ...board }],
       stock: board.stock.slice(1),
       waste: [cardToFlip, ...board.waste]
     };
@@ -109,6 +117,8 @@ function GameBoard(props: Props): JSX.Element {
     return <div>You Won!!</div>;
   }
 
+  console.log('history', board && board.history && JSON.parse(JSON.stringify(board.history)));
+
   return (
     <GameBoardWrapper className="GameBoard">
       <div className="topRow">
@@ -125,6 +135,10 @@ function GameBoard(props: Props): JSX.Element {
             {board && Boolean(board.waste.length) && <CardComponent card={board.waste[0]} coverTheCardBelow={true} />}
           </CardPile>
         </div>
+
+        <button id="undoButton" onClick={undo}>
+          {'<'}
+        </button>
 
         {/* FOUNDATIONS */}
         <div className="topRowRight">{foundations}</div>
